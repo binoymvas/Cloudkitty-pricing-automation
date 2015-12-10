@@ -1,1 +1,1 @@
-# Cloudkitty-rating-automation
+# Cloudkitty-pricing-automation
