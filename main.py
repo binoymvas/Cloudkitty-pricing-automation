@@ -41,19 +41,19 @@ module.enable()
 service_args = {
     "name": "compute",
 }
-
+                                                                                                                                                                                                           
 # service creation                                                                                                                                                                                   
 service_creation = ck.hashmap.services.create(**service_args)                                                                                                                                            
-
+                                                                                                                                                                                                           
 # service id fetch                                                                                                                                                                                         
 service_id = service_creation.service_id                                                                                                                                                                   
-
+                                                                                                                                                                                                           
 # flavor field args                                                                                                                                                                                        
 fields_flavor = {                                                                                                                                                                                          
     "name": "flavor",
     "service_id": service_id,
 }                                                                                                                                                                                                          
-
+                                                                                                                                                                                                           
 # flavor field creation                                                                                                                                                                                    
 flavor_field_creation = ck.hashmap.fields.create(**fields_flavor)
 
@@ -83,6 +83,17 @@ group_field_creation = ck.hashmap.groups.create(**group_fields_args)
 # group_id fetch
 group_id = group_field_creation.group_id
 
+# group field args for image
+group_fields_args_for_image = {
+    "name": "instance_image",
+}
+
+# group field creation for image
+group_field_creation_for_image = ck.hashmap.groups.create(**group_fields_args_for_image)
+
+# group_id fetch for image
+group_id_image = group_field_creation_for_image.group_id
+
 # Fetch the arguments for Instance size section from conf file
 instance_size_section = dict(config.items("instance_size_section"))
 
@@ -111,8 +122,7 @@ for id, cost in image_section.items():
         'cost': cost,
         'value': id,
         'field_id':image_field_id,
-        'group_id': group_id,
-        'type': 'rate',
+        'group_id': group_id_image,
     }
 
     # mapping creation for image price
