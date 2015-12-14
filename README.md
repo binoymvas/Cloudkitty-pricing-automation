@@ -56,3 +56,18 @@ We need to take the image id from the devstack admin panel and provide it here w
 ```
 
 We can be able to provide 'n' number of image id's here to configure pricing.
+
+
+**Pricing Logic and sample results**:
+
+We are applying flat pricing logic here.
+
+Consider instance size is having price as follows 1.5,2.5,3.5,4.5,5.5 for sizes m1.tiny,m1.small,m1.medium,m1.large,m1.xlarge respectively.
+
+Image "cirros-0.3.4-x86_64-uec" is assigned a value of 7.5 and image "Windows server" is assigned a value of 8.5.
+
+Note: In config file you will be defining only the image UUID and cost, not Image name as demonstrated here.
+
+Now you are selecting the size as m1.small and image "cirros-0.3.4-x86_64-uec".
+
+So result will be 2.5 + 7.5 = 10.0.
