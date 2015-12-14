@@ -6,6 +6,7 @@
 # Author: Muralidharan.S
 #
 from cloudkittyclient import client
+
 import ConfigParser
 
 # For importing details from config file
@@ -24,26 +25,35 @@ kwargs = {
     "password":connection['password'],
 }
 
+# Establish the connection
+ck = client.get_client("1", **kwargs)                                                                                                                                                                      
+
+# module enable args
+module_args = {
+    "module_id": "hashmap",
+}
+
+# Enable Hashmap module
+module = ck.modules.get(**module_args)
+module.enable()
+
 # creation of service args
 service_args = {
     "name": "compute",
 }
 
-# Establish the connection                                                                                                                                                                                              
-ck = client.get_client("1", **kwargs)                                                                                                                                                                      
-                                                                                                                                                                                                           
 # service creation                                                                                                                                                                                   
 service_creation = ck.hashmap.services.create(**service_args)                                                                                                                                            
-                                                                                                                                                                                                           
+
 # service id fetch                                                                                                                                                                                         
 service_id = service_creation.service_id                                                                                                                                                                   
-                                                                                                                                                                                                           
+
 # flavor field args                                                                                                                                                                                        
 fields_flavor = {                                                                                                                                                                                          
     "name": "flavor",
     "service_id": service_id,
 }                                                                                                                                                                                                          
-                                                                                                                                                                                                           
+
 # flavor field creation                                                                                                                                                                                    
 flavor_field_creation = ck.hashmap.fields.create(**fields_flavor)
 
