@@ -46,8 +46,42 @@ service_args = {
 service_creation = ck.hashmap.services.create(**service_args)                                                                                                                                            
                                                                                                                                                                                                            
 # service id fetch                                                                                                                                                                                         
-service_id = service_creation.service_id                                                                                                                                                                   
-                                                                                                                                                                                                           
+service_id = service_creation.service_id  
+
+# creation of service args for network inbound
+service_args_network_in = {
+    "name": "network.bw.in",
+}                                                                                                                                                                 
+
+# service creation network inbound                                                                                                                                                                                
+service_creation_network_in = ck.hashmap.services.create(**service_args_network_in)
+
+# service id fetch network inbound                                                                                                                                                                                        
+service_id_network_in = service_creation_network_in.service_id  
+
+# creation of service args for network outbound
+service_args_network_out = {
+    "name": "network.bw.out",
+}                                                                                                                                                                 
+
+# service creation network outbound                                                                                                                                                                                
+service_creation_network_out = ck.hashmap.services.create(**service_args_network_out)
+
+# service id fetch network outbound                                                                                                                                                                                        
+service_id_network_out = service_creation_network_out.service_id 
+
+
+# creation of service for floating IP
+floating_ip_service_args = {
+    "name": "network.floating",
+}
+
+# service creation for floating IP
+service_creation_floating = ck.hashmap.services.create(**floating_ip_service_args)
+
+# floating ip service id
+floating_service_id = service_creation_floating.service_id
+
 # flavor field args                                                                                                                                                                                        
 fields_flavor = {                                                                                                                                                                                          
     "name": "flavor",
@@ -127,3 +161,86 @@ for id, cost in image_section.items():
 
     # mapping creation for image price
     mapping_fields_image = ck.hashmap.mappings.create(**args_to_rate_image)
+
+
+# group field args for floating
+group_fields_args_floating = {
+    "name": "network.floating",
+}
+
+# group field creation for floating
+group_field_creation_floating = ck.hashmap.groups.create(**group_fields_args_floating)
+
+# group_id fetch floating
+group_id_floating = group_field_creation_floating.group_id
+
+# Fetch the arguments for image pricing section from conf file
+float_ip_section = dict(config.items("floating_ip"))
+
+# create the mapping for floating IP Pricing section with existing value
+for id, cost in float_ip_section.items():
+
+    # mapping for float ip
+    args_to_rate_ip_float = {
+        'cost': cost,
+        'group_id': group_id_floating,
+        'service_id': floating_service_id, 
+    }
+
+    # mapping creation for image price
+    mapping_fields_float_ip = ck.hashmap.mappings.create(**args_to_rate_ip_float)
+    
+
+# group field args for network inbound
+group_fields_args_network_in = {
+    "name": "network.bw.in",
+}
+
+# group field creation for network inbound
+group_field_creation_network_in = ck.hashmap.groups.create(**group_fields_args_network_in)
+
+# group_id fetch network inbound
+group_id_network_in = group_field_creation_network_in.group_id
+
+# Fetch the arguments for network inbound section from conf file
+network_in_section = dict(config.items("network_inbound"))
+
+# create the mapping for network inbound with existing values
+for id, cost in network_in_section.items():
+
+    # mapping for network inbound
+    args_to_rate_network_in = {
+        'cost': cost,
+        'group_id': group_id_network_in,
+        'service_id': service_id_network_in, 
+    }
+
+    # mapping creation for network inbound 
+    mapping_fields_network_in = ck.hashmap.mappings.create(**args_to_rate_network_in)
+    
+# group field args for network outbound
+group_fields_args_network_out = {
+    "name": "network.bw.out",
+}
+
+# group field creation for network outbound
+group_field_creation_network_out = ck.hashmap.groups.create(**group_fields_args_network_out)
+
+# group_id fetch network outbound
+group_id_network_out = group_field_creation_network_out.group_id
+
+# Fetch the arguments for network outbound section from conf file
+network_out_section = dict(config.items("network_outbound"))
+
+# create the mapping for network outbound with existing values
+for id, cost in network_out_section.items():
+
+    # mapping for network outbound
+    args_to_rate_network_out = {
+        'cost': cost,
+        'group_id': group_id_network_out,
+        'service_id': service_id_network_out, 
+    }
+
+    # mapping creation for network outbound 
+    mapping_fields_network_out = ck.hashmap.mappings.create(**args_to_rate_network_out)
